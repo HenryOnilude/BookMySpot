@@ -1,6 +1,6 @@
 # BookMySpot
 
-A modern parking spot booking application built with Next.js that allows users to search, view, and book parking spots in West London.
+A modern parking spot booking application built with Next.js that allows users to search, view, and book parking spots in London.
 
 ## Features
 
