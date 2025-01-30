@@ -106,7 +106,7 @@ export default function SpotSearch({ onSearch }: SpotSearchProps) {
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4">
-      <h1 className="text-2xl font-bold mb-6">Find Available Parking Spots</h1>
+      <h1 className="text-2xl font-bold mb-6 mt-8">Find Available Parking Spots</h1>
       
       <div className="space-y-6">
         {/* Search Form */}

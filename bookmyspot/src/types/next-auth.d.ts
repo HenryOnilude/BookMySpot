@@ -1,7 +1,6 @@
 // src/types/next-auth.d.ts
 import { User as PrismaUser, UserType } from "@prisma/client";
 import NextAuth, { DefaultSession } from "next-auth";
-import { JWT } from "next-auth/jwt";
 
 declare module "next-auth" {
   interface Session {
@@ -10,10 +9,18 @@ declare module "next-auth" {
       email: string;
       name: string;
       type: UserType;
+      emailVerified: Date | null;
     } & DefaultSession["user"]
   }
 
-  interface User extends Omit<PrismaUser, "password"> {}
+  interface User {
+    id: string;
+    email: string;
+    name: string;
+    type: UserType;
+    emailVerified: Date | null;
+    image?: string | null;
+  }
 }
 
 declare module "next-auth/jwt" {
@@ -22,5 +29,7 @@ declare module "next-auth/jwt" {
     email: string;
     name: string;
     type: UserType;
+    emailVerified: Date | null;
+    picture?: string | null;
   }
 }

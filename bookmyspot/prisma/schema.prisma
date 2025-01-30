@@ -104,6 +104,7 @@ model Booking {
   stripePaymentIntentId String?
   createdAt            DateTime      @default(now())
   updatedAt            DateTime      @updatedAt
+  chatMessages         ChatMessage[]
 
   @@index([spotId])
   @@index([userId])
@@ -143,6 +144,18 @@ model Notification {
   user      User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
+}
+
+model ChatMessage {
+  id          String   @id @default(cuid())
+  bookingId   String
+  booking     Booking  @relation(fields: [bookingId], references: [id])
+  senderId    String
+  senderName  String
+  content     String
+  timestamp   DateTime @default(now())
+
+  @@index([bookingId])
 }
 
 model Feedback {

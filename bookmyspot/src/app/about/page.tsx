@@ -146,11 +146,11 @@ export default function AboutPage() {
       </section>
 
       {/* Mission Section */}
-      <section id="mission" className="py-16">
+      <section id="mission" className="py-6">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-8">Our Mission</h2>
-            <p className="text-lg text-gray-600 mb-8">
+            <p className="text-lg text-gray-600 mb-4">
               To transform the parking experience through innovative technology,
               making it seamless, efficient, and stress-free for both drivers
               and parking space owners.
@@ -160,7 +160,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section id="team" className="py-16 bg-white">
+      <section id="team" className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Our Team</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

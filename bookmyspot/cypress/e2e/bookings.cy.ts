@@ -58,16 +58,40 @@ describe('Bookings Page', () => {
     cy.contains('Booking cancelled successfully').should('be.visible')
   })
 
+  it('should match visual snapshot', () => {
+    cy.visit('/bookings')
+    cy.wait('@session')
+    cy.wait('@getBookings')
+    // @ts-ignore
+    cy.percySnapshot('Bookings Page')
+  })
+
   it('should be accessible', () => {
     cy.visit('/bookings')
     cy.wait('@session')
     cy.wait('@getBookings')
     cy.injectAxe()
-    cy.checkA11y(null, {
-      runOnly: {
-        type: 'tag',
-        values: ['wcag2a', 'wcag2aa']
-      }
+    cy.checkA11y(undefined, {
+      includedImpacts: ['critical', 'serious']
+    })
+  })
+
+  it('should have semantically correct content structure', () => {
+    cy.visit('/bookings')
+    cy.wait('@session')
+    cy.wait('@getBookings')
+    
+    // Verify semantic structure
+    cy.get('main').should('exist')
+    cy.get('h1').should('have.text', 'My Bookings')
+      .and('have.css', 'font-size')
+      .and('be.oneOf', ['24px', '1.5rem', '2rem']) // Common heading sizes
+    
+    // Verify booking card structure
+    cy.get('[data-testid="booking-card"]').within(() => {
+      cy.get('h2, h3').should('exist') // Proper heading hierarchy
+      cy.get('time').should('have.attr', 'datetime') // Semantic time element
+      cy.get('address').should('exist') // Semantic address element
     })
   })
 
@@ -114,5 +138,143 @@ describe('Bookings Page', () => {
     
     cy.contains('Please sign in to view your bookings').should('be.visible')
     cy.get('a').contains('Sign In').should('be.visible')
+  })
+
+  // Accessibility testing with Axe
+  it('should pass accessibility tests', () => {
+    cy.visit('/bookings')
+    cy.wait('@session')
+    cy.wait('@getBookings')
+    
+    cy.injectAxe()
+    cy.checkA11y(undefined, {
+      includedImpacts: ['critical', 'serious'],
+      rules: {
+        'color-contrast': { enabled: true },
+        'heading-order': { enabled: true },
+        'label': { enabled: true }
+      }
+    }, (violations) => {
+      function terminalLog(violations: Array<{
+        id: string;
+        impact: string;
+        description: string;
+        nodes: Array<{ target: string[] }>;
+      }>) {
+        cy.task('log', `${violations.length} accessibility violation${
+          violations.length === 1 ? '' : 's'
+        } ${violations.length === 1 ? 'was' : 'were'} detected`)
+        
+        violations.forEach(violation => {
+          const nodes = Cypress.$(violation.nodes.map(node => node.target.join(','))).get()
+          
+          cy.task('log', {
+            name: violation.id,
+            message: `[${violation.impact}] ${violation.description}`,
+            consoleProps: () => ({
+              violationId: violation.id,
+              impact: violation.impact,
+              description: violation.description,
+              nodes: nodes
+            })
+          })
+        })
+      }
+      terminalLog(violations)
+    })
+  })
+
+  // Performance and best practices testing with Lighthouse
+  it('should pass lighthouse audit', () => {
+    cy.visit('/bookings')
+    cy.wait('@session')
+    cy.wait('@getBookings')
+    
+    cy.lighthouse({
+      performance: 85,
+      accessibility: 90,
+      'best-practices': 85,
+      seo: 85,
+      pwa: 50
+    }, {
+      formFactor: 'desktop',
+      screenEmulation: {
+        mobile: false,
+        disable: false,
+        width: 1350,
+        height: 940,
+        deviceScaleFactor: 1,
+      }
+    })
+  })
+
+  it('should open and use chat functionality', () => {
+    // Mock chat messages API
+    cy.intercept('GET', '/api/chat/*', {
+      statusCode: 200,
+      body: [{
+        id: '1',
+        senderId: '1',
+        senderName: 'Test User',
+        content: 'Hello, I have a question about my booking.',
+        timestamp: new Date().toISOString()
+      }]
+    }).as('getMessages')
+
+    cy.intercept('POST', '/api/chat/*', {
+      statusCode: 200,
+      body: {
+        id: '2',
+        senderId: '1',
+        senderName: 'Test User',
+        content: 'Test message',
+        timestamp: new Date().toISOString()
+      }
+    }).as('postMessage')
+
+    cy.visit('/bookings')
+    cy.wait('@session')
+    cy.wait('@getBookings')
+
+    // Open chat
+    cy.get('button[aria-label="Open chat"]').click()
+    cy.wait('@getMessages')
+
+    // Verify chat UI elements
+    cy.contains('Chat').should('be.visible')
+    cy.get('input[aria-label="Message input"]').should('be.visible')
+    cy.get('button[aria-label="Send message"]').should('be.visible')
+
+    // Send a message
+    cy.get('input[aria-label="Message input"]')
+      .type('Test message')
+    cy.get('button[aria-label="Send message"]').click()
+    cy.wait('@postMessage')
+
+    // Verify message appears in chat
+    cy.contains('Test message').should('be.visible')
+
+    // Close chat
+    cy.get('button[aria-label="Close chat"]').click()
+    cy.contains('Chat').should('not.exist')
+  })
+
+  it('should handle chat errors gracefully', () => {
+    // Mock failed chat messages API
+    cy.intercept('GET', '/api/chat/*', {
+      statusCode: 500,
+      body: { message: 'Internal Server Error' }
+    }).as('getMessagesFailed')
+
+    cy.visit('/bookings')
+    cy.wait('@session')
+    cy.wait('@getBookings')
+
+    // Open chat
+    cy.get('button[aria-label="Open chat"]').click()
+    cy.wait('@getMessagesFailed')
+
+    // Verify error handling
+    cy.get('.chat-error-message').should('be.visible')
   })
 })

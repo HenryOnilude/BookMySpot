@@ -3,8 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
 import { compare } from "bcryptjs"
 import { User, UserType } from "@prisma/client"
-import { JWT } from "next-auth/jwt"
-import { Session } from "next-auth"
+import type { JWT } from "next-auth/jwt"
 
 // Define the authenticated user type
 interface AuthenticatedUser {
@@ -33,6 +32,12 @@ declare module "next-auth/jwt" {
   }
 }
 
+// Define the credentials type
+interface Credentials {
+  email: string;
+  password: string;
+}
+
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
@@ -49,58 +54,46 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials, req): Promise<any> {
+      async authorize(credentials, req) {
         if (!credentials?.email || !credentials?.password) {
-          return null;
+          return null
         }
 
-        try {
-          const user = await prisma.user.findUnique({
-            where: {
-              email: credentials.email
-            },
-            select: {
-              id: true,
-              email: true,
-              name: true,
-              password: true,
-              type: true,
-              emailVerified: true,
-              image: true
-            }
-          });
-
-          if (!user || !user.password) {
-            return null;
+        const user = await prisma.user.findUnique({
+          where: {
+            email: credentials.email
+          },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            password: true,
+            type: true,
+            emailVerified: true,
+            image: true
           }
+        })
 
-          const isPasswordValid = await compare(credentials.password, user.password);
-
-          if (!isPasswordValid) {
-            return null;
-          }
-
-          // Return user data with all necessary fields
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            type: user.type,
-            emailVerified: user.emailVerified,
-            image: user.image
-          };
-        } catch (error) {
-          console.error('Auth error:', error);
-          return null;
+        if (!user || !user.password) {
+          return null
         }
-      },
+
+        const isPasswordValid = await compare(credentials.password, user.password)
+
+        if (!isPasswordValid) {
+          return null
+        }
+
+        const { password: _, ...userWithoutPassword } = user
+        return userWithoutPassword
+      }
     })
   ],
   callbacks: {
-    async jwt({ token, user }: { token: JWT, user: any }) {
+    async jwt({ token, user }) {
       if (user) {
-        // Update token with user data
-        return {
+        // Explicitly type the token update
+        const updatedToken: JWT = {
           ...token,
           id: user.id,
           email: user.email,
@@ -108,12 +101,12 @@ export const authOptions: NextAuthOptions = {
           type: user.type,
           emailVerified: user.emailVerified,
           picture: user.image
-        };
+        }
+        return updatedToken
       }
-      return token;
+      return token
     },
-    async session({ session, token }: { session: Session, token: JWT }) {
-      // Update session with token data
+    async session({ session, token }) {
       return {
         ...session,
         user: {
@@ -121,11 +114,11 @@ export const authOptions: NextAuthOptions = {
           id: token.id,
           email: token.email,
           name: token.name,
-          type: token.type,
+          type: token.type as UserType,
           emailVerified: token.emailVerified,
           image: token.picture
         }
-      };
+      }
     }
   }
 }

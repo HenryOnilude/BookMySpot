@@ -1,0 +1,13 @@
+version: 2
+snapshot:
+  widths: [375, 768, 1280]
+  min-height: 1024
+  percy-css: |
+    /* Hide dynamic content that might cause false positives */
+    [data-testid="timestamp"] {
+      visibility: hidden;
+    }
+discovery:
+  allowed-hostnames: []
+  network-idle-timeout: 100
+  disable-cache: true

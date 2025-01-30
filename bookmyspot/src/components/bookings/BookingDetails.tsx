@@ -14,6 +14,7 @@ import {
   AlertTriangle,
   CheckCircle
 } from 'lucide-react';
+import ChatBox from '../chat/ChatBox';
 
 // Extended Booking type that includes related Spot and User data
 interface ExtendedBooking extends Booking {
@@ -189,6 +190,10 @@ export default function BookingDetails({ booking, onCancelBooking }: BookingDeta
           </div>
         </div>
       </Card>
+
+      <div className="mt-4">
+        <ChatBox bookingId={booking.id} />
+      </div>
     </div>
   );
 }
