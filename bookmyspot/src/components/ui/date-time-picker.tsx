@@ -90,9 +90,7 @@ export function DateTimePicker({ date, setDate, className }: DateTimePickerProps
               mode="single"
               selected={selectedDate}
               onSelect={handleDateSelect}
-              disabled={(date) =>
-                date < new Date() || date < new Date("1900-01-01")
-              }
+              disabled={(date) => date < minDate}
               initialFocus
             />
           </PopoverContent>

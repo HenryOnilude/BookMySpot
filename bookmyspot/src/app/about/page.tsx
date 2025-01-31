@@ -139,7 +139,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <h1 className="text-5xl font-bold mb-6">About BookMySpot</h1>
           <p className="text-xl">
-            We're revolutionising the way people find and book parking spaces,
+            We&apos;re revolutionising the way people find and book parking spaces,
             making urban mobility smoother and more efficient.
           </p>
         </div>
@@ -198,7 +198,7 @@ export default function AboutPage() {
                 Founded in 2024, BookMySpot emerged from a simple observation: finding parking in busy urban areas was unnecessarily stressful and time-consuming. Our founder, Henry Onilude, experienced this frustration firsthand and decided to create a solution.
               </p>
               <p>
-                What started as a small pilot project in one neighbourhood has grown into a comprehensive parking management platform, serving thousands of users across multiple cities. We've helped countless property owners monetize their unused parking spaces while making it easier for drivers to find and book parking spots.
+                What started as a small pilot project in one neighbourhood has grown into a comprehensive parking management platform, serving thousands of users across multiple cities. We&apos;ve helped countless property owners monetize their unused parking spaces while making it easier for drivers to find and book parking spots.
               </p>
               <p>
                 Today, BookMySpot continues to innovate and expand, focusing on creating sustainable parking solutions that benefit both individuals and communities.
@@ -213,7 +213,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-8">Get in Touch</h2>
           <p className="text-lg text-gray-600 mb-8">
-            Have questions? We'd love to hear from you.
+            Have questions? We&apos;d love to hear from you.
           </p>
           <Link
             href="/contact"

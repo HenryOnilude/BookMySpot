@@ -13,7 +13,7 @@ export interface AuthenticatedUser extends Omit<User, 'type'> {
   role: UserType
 }
 
-export interface MockSession extends Omit<Session, 'user'> {
+export interface MockSession extends Session {
   user: AuthenticatedUser
   expires: string
 }

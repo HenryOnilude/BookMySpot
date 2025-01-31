@@ -3,8 +3,7 @@ import BookingsPage from '@/app/bookings/page'
 import { SessionProvider } from 'next-auth/react'
 import { AuthProvider } from '@/contexts/auth'
 import '@testing-library/jest-dom'
-import type { ExtendedBooking, MockSession, ExtendedSpot } from '../types'
-import { UserType } from '@prisma/client'
+import type { ExtendedBooking, MockSession, ExtendedSpot, UserType } from '../types'
 
 const mockSpot: ExtendedSpot = {
   id: '1',
