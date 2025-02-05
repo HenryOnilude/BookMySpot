@@ -254,7 +254,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the a
 ## Phase 1: Immediate Enhancements
 **Progressive Web App (PWA)**
 * Offline functionality
-* Mobile-optimized experience
+* Mobile-optimised experience
 * Push notifications
 
 **Real-time Features**
@@ -292,7 +292,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the a
 **Advanced Features**
 * Multi-language support
 * Advanced booking algorithms
-* Machine learning optimizations
+* Machine learning optimisations
 
 # Project Statistics
 
