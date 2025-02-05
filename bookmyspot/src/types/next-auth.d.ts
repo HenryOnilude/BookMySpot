@@ -1,4 +1,3 @@
-// src/types/next-auth.d.ts
 import { User as PrismaUser, UserType } from "@prisma/client";
 import NextAuth, { DefaultSession } from "next-auth";
 
