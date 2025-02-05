@@ -1,6 +1,3 @@
-/// <reference types="@testing-library/jest-dom" />
-/// <reference types="jest-axe" />
-
 import { render, screen, waitFor, fireEvent, act } from '@testing-library/react'
 import { axe } from 'jest-axe'
 import BookingsPage from '@/app/bookings/page'
