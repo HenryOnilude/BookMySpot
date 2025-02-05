@@ -1,4 +1,3 @@
-/// <reference types="@testing-library/jest-dom" />
 import { Session } from 'next-auth'
 import { Booking, Spot, User } from '@prisma/client'
 import { AxeResults } from 'jest-axe'
