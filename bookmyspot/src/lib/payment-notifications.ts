@@ -1,5 +1,3 @@
-// src/lib/payment-notifications.ts
-
 import { prisma } from '@/lib/prisma';
 import { Booking } from '@prisma/client';
 
